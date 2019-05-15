@@ -1,6 +1,5 @@
 package com.company;
 
-// you can also use imports, for example:
 import java.util.*;
 
 public class Solution {
@@ -9,6 +8,12 @@ public class Solution {
 
         if(leap>=game.length || game.length == 1){
             return true;
+        }
+        else if (!Arrays.stream(game).anyMatch(x -> x==1)) {
+            return true;
+        }
+        else if (leap <= 1) {
+            return false;
         }
 
         GameTree gt = new GameTree();
@@ -84,25 +89,20 @@ class GameTree {
             if (root.left == null) {
                 incrementSubtree(root);
             root.left = newNode;
-        }
-/*            else {
-                insertRecursive(root.left, newNode, leap);
-            }*/
+            }
         }
         else if (newNode.value == root.value+1) {
             if (root.right == null) {
                 incrementSubtree(root);
                 root.right = newNode;
-            } /*else {
-                insertRecursive(root.right, newNode, leap);
-            }*/
+            }
         }
-        else if (newNode.value == root.value + leap){
+        else if (leap > 1 && newNode.value == root.value + leap){
             if (root.leap == null) {
                 incrementSubtree(root);
                 root.leap = newNode;
 
-                addZerosToTheLeft(newNode, game, leap);
+                addZerosToTheLeft(root.leap, newNode, game, leap);
             }
         }
         else {
@@ -110,19 +110,13 @@ class GameTree {
             insertRecursive(root.leap, newNode, game, leap);
             insertRecursive(root.right, newNode, game, leap);
         }
-/*        else {
-            Node findPotentialParent = findNode(newNode.value-leap, leap);
-            if (findPotentialParent != null) {
-                insertRecursive(findPotentialParent, newNode, game, leap);
-                addZerosToTheLeft(newNode, game, leap);
-            }*/
     }
 
 
-    private void addZerosToTheLeft(Node newNode, int[] game, int leap) {
+    private void addZerosToTheLeft(Node root, Node newNode, int[] game, int leap) {
         int i = newNode.value-1;
         while (game[i] == 0 && i > 0 ) {
-            insertRecursive(findNode(i+1, leap), new Node(i), game, leap);
+            insertRecursive(root, new Node(i), game, leap);
             i--;
         }
     }
@@ -145,30 +139,6 @@ class GameTree {
         }
 
         return (containsNodeNSTRecursive(current.left, value) || containsNodeNSTRecursive(current.right, value) || containsNodeNSTRecursive(current.leap, value));
-    }
-
-    public Node findNode(int value, int leap) {
-        return getNodeRecursive(root, value, leap);
-    }
-
-    private Node getNodeRecursive(Node current, int value, int leap) {
-        if (current == null) {
-            return null;
-        }
-        else if (value == current.value) {
-            return current;
-        }
-        else if ( value<current.value) {
-            return getNodeRecursive(current.left, value, leap);
-        }
-        else {
-           Node returnNode = getNodeRecursive(current.leap, value, leap);
-
-           if (returnNode == null) {
-               returnNode = getNodeRecursive(current.right, value, leap);
-           }
-           return returnNode;
-        }
     }
 }
 
