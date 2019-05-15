@@ -28,8 +28,6 @@ public class Solution {
 
     }
 
-
-
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int q = scan.nextInt();
@@ -47,6 +45,7 @@ public class Solution {
         scan.close();
     }
 }
+
 class Node {
     int value;
     int subtree;
@@ -112,7 +111,6 @@ class GameTree {
         }
     }
 
-
     private void addZerosToTheLeft(Node root, Node newNode, int[] game, int leap) {
         int i = newNode.value-1;
         while (game[i] == 0 && i > 0 ) {
@@ -137,7 +135,7 @@ class GameTree {
         if (value <= current.value) {
             return true;
         }
-
+        
         return (containsNodeNSTRecursive(current.left, value) || containsNodeNSTRecursive(current.right, value) || containsNodeNSTRecursive(current.leap, value));
     }
 }
